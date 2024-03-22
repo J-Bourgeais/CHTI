@@ -8,45 +8,81 @@ ARM Macro Assembler    Page 1
     2 00000000                 THUMB
     3 00000000         
     4 00000000                 export           GestionSon_callback
-    5 00000000         
-    6 00000000         ; ====================== zone de réservation de données,
+    5 00000000                 import           LongueurSon
+    6 00000000                 import           Son
+    7 00000000         
+    8 00000000         ; ====================== zone de réservation de données,
                          ======================================
-    7 00000000         ;Section RAM (read only) :
-    8 00000000                 area             mesdata,data,readonly
-    9 00000000         
-   10 00000000         
-   11 00000000         ;Section RAM (read write):
-   12 00000000                 area             maram,data,readwrite
-   13 00000000 00000000 
+    9 00000000         ;Section RAM (read only) :
+   10 00000000                 area             mesdata,data,readonly
+   11 00000000         
+   12 00000000         
+   13 00000000         ;Section RAM (read write):
+   14 00000000                 area             maram,data,readwrite
+   15 00000000 00000000 
                        GestionSon_Index
                                dcd              0
-   14 00000004         
-   15 00000004         
-   16 00000004         ; ======================================================
+   16 00000004 00 00   SortieSon
+                               dcw              0
+   17 00000006         
+   18 00000006         
+   19 00000006         ; ======================================================
                        =========================================
-   17 00000004         
-   18 00000004         
-   19 00000004         
-   20 00000004         
-   21 00000004         ;Section ROM code (read only) :  
-   22 00000004                 area             moncode,code,readonly
-   23 00000000         ; écrire le code ici  
-   24 00000000         
-   25 00000000         GestionSon_callback
+   20 00000006         
+   21 00000006         
+   22 00000006         
+   23 00000006         
+   24 00000006         ;Section ROM code (read only) :  
+   25 00000006                 area             moncode,code,readonly
+   26 00000000         ; écrire le code ici  
+   27 00000000         
+   28 00000000         GestionSon_callback
                                proc
-   26 00000000         
-   27 00000000 4902            ldr              R1, =GestionSon_Index
-   28 00000002 6808            ldr              R0, [R1]
-   29 00000004 3001            adds             R0, #1
-   30 00000006 6008            str              R0, [R1]
-   31 00000008 4770            bx               lr
-   32 0000000A         
-   33 0000000A                 endp
-   34 0000000A         
-   35 0000000A         
-   36 0000000A         
-   37 0000000A                 END
-              00 00 00000000 
+   29 00000000         
+   30 00000000 490C            ldr              R1, =GestionSon_Index
+   31 00000002         
+   32 00000002         
+   33 00000002 4A0D            ldr              R2, =LongueurSon
+   34 00000004 6808            ldr              R0, [R1]
+   35 00000006 6813            ldr              R3, [R2]
+   36 00000008 4298            cmp              R0,R3
+   37 0000000A DD00            ble              echelle
+   38 0000000C         
+   39 0000000C 4770            bx               lr
+   40 0000000E         
+   41 0000000E         echelle
+   42 0000000E 4B0B            ldr              R3, =Son
+   43 00000010 F853 0010       ldr              R0, [R3,R0,lsl #1]
+   44 00000014 F04F 0200       mov              R2, #0
+   45 00000018 F500 4200       add              R2, R0, #32768
+   46 0000001C F240 23CF       mov              R3, #719
+   47 00000020 FB02 F203       mul              R2, R3
+   48 00000024 EA4F 4212       lsr              R2, R2, #16
+   49 00000028         
+   50 00000028 4B05            ldr              R3, =SortieSon
+   51 0000002A 601A            str              R2,[R3]
+   52 0000002C         
+   53 0000002C         
+
+
+
+ARM Macro Assembler    Page 2 
+
+
+   54 0000002C 6808            ldr              R0, [R1]
+   55 0000002E 3001            adds             R0, #1
+   56 00000030 6008            str              R0, [R1]
+   57 00000032         
+   58 00000032 4770            bx               lr
+   59 00000034                 endp
+   60 00000034         
+   61 00000034         
+   62 00000034         
+   63 00000034                 END
+              00000000 
+              00000000 
+              00000000 
+              00000000 
 Command Line: --debug --xref --diag_suppress=9931 --cpu=Cortex-M3 --apcs=interw
 ork --depend=.\obj\gestionson.d -o.\obj\gestionson.o -I.\RTE\_Simu -IC:\Program
 data\Keil\Arm\Packs\ARM\CMSIS\5.7.0\CMSIS\Core\Include -IC:\Programdata\Keil\Ar
@@ -64,7 +100,7 @@ mesdata 00000000
 
 Symbol: mesdata
    Definitions
-      At line 8 in file GestionSon\GestionSon.s
+      At line 10 in file GestionSon\GestionSon.s
    Uses
       None
 Comment: mesdata unused
@@ -79,19 +115,27 @@ GestionSon_Index 00000000
 
 Symbol: GestionSon_Index
    Definitions
-      At line 13 in file GestionSon\GestionSon.s
+      At line 15 in file GestionSon\GestionSon.s
    Uses
-      At line 27 in file GestionSon\GestionSon.s
+      At line 30 in file GestionSon\GestionSon.s
 Comment: GestionSon_Index used once
+SortieSon 00000004
+
+Symbol: SortieSon
+   Definitions
+      At line 16 in file GestionSon\GestionSon.s
+   Uses
+      At line 50 in file GestionSon\GestionSon.s
+Comment: SortieSon used once
 maram 00000000
 
 Symbol: maram
    Definitions
-      At line 12 in file GestionSon\GestionSon.s
+      At line 14 in file GestionSon\GestionSon.s
    Uses
       None
 Comment: maram unused
-2 symbols
+3 symbols
 
 
 
@@ -102,17 +146,48 @@ GestionSon_callback 00000000
 
 Symbol: GestionSon_callback
    Definitions
-      At line 25 in file GestionSon\GestionSon.s
+      At line 28 in file GestionSon\GestionSon.s
    Uses
       At line 4 in file GestionSon\GestionSon.s
 Comment: GestionSon_callback used once
+echelle 0000000E
+
+Symbol: echelle
+   Definitions
+      At line 41 in file GestionSon\GestionSon.s
+   Uses
+      At line 37 in file GestionSon\GestionSon.s
+Comment: echelle used once
 moncode 00000000
 
 Symbol: moncode
    Definitions
-      At line 22 in file GestionSon\GestionSon.s
+      At line 25 in file GestionSon\GestionSon.s
    Uses
       None
 Comment: moncode unused
+3 symbols
+
+
+
+ARM Macro Assembler    Page 1 Alphabetic symbol ordering
+External symbols
+
+LongueurSon 00000000
+
+Symbol: LongueurSon
+   Definitions
+      At line 5 in file GestionSon\GestionSon.s
+   Uses
+      At line 33 in file GestionSon\GestionSon.s
+Comment: LongueurSon used once
+Son 00000000
+
+Symbol: Son
+   Definitions
+      At line 6 in file GestionSon\GestionSon.s
+   Uses
+      At line 42 in file GestionSon\GestionSon.s
+Comment: Son used once
 2 symbols
-342 symbols in table
+346 symbols in table
