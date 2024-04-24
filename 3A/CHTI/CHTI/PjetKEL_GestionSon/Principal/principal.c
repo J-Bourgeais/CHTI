@@ -4,7 +4,10 @@
 #include "ServiceJeuLaser.h"
 
 extern void GestionSon_callback(void);
+extern int PeriodeSonMicroSec;
 int compteur=0;
+
+//extern (unsigned int)* SortieSon;
 
 	
 int main(void)
@@ -20,7 +23,8 @@ CLOCK_Configure();
 /* Configuration du son (voir ServiceJeuLaser.h) 
  Insérez votre code d'initialisation des parties matérielles gérant le son ....*/	
 
-ServJeuLASER_Son_Init(1000, 0, &(GestionSon_callback));
+ServJeuLASER_Son_Init(PeriodeSonMicroSec, 0, &(GestionSon_callback));
+//PWM_Set_Value_TIM3_Ch3(*SortieSon);
 	
 	
 
