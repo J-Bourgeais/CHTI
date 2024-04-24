@@ -2,6 +2,7 @@
 
 #include "DriverJeuLaser.h"
 #include "ServiceJeuLaser.h"
+#include "DFT.h"
 
 extern void GestionSon_callback(void);
 extern int PeriodeSonMicroSec;
@@ -25,6 +26,8 @@ CLOCK_Configure();
 
 ServJeuLASER_Son_Init(PeriodeSonMicroSec, 0, &(GestionSon_callback));
 //PWM_Set_Value_TIM3_Ch3(*SortieSon);
+	
+Afficher();
 	
 	
 
