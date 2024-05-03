@@ -1,7 +1,7 @@
 #ifndef DFT_H
 #define DFT_H
 
-float DFT(int k, float * x);
+long long int DFT(short k, short * x);
 void Afficher(void);
 
 #endif

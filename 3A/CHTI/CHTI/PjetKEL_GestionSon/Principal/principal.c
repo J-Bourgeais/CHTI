@@ -3,6 +3,7 @@
 #include "DriverJeuLaser.h"
 #include "ServiceJeuLaser.h"
 #include "DFT.h"
+#include "Signal_4_12.h"
 
 extern void GestionSon_callback(void);
 extern int PeriodeSonMicroSec;
