@@ -7,8 +7,8 @@
 #define M 64
 
 long long int DFT(short k, short * x){
-	long long int Re=0.0;
-	long long int Im=0.0;
+	long long int Re=0;
+	long long int Im=0;
 	for (int n=0;n<M;n++){
 		int i = (k*n)%M;
 		Re+=(x[n]*(TabCos[i]));
